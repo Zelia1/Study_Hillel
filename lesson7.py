@@ -29,7 +29,6 @@ print(triangle)
 def my_print(string):
     print(f'***{string}***')
 
-
 line_here = input()
 my_print(line_here)
 ########################################################
@@ -56,6 +55,7 @@ print(average_amount)
 # г) Объединить эти два словаря в новый словарь по правилу:
 # если ключ есть только в одном из двух словарей - поместить пару ключ:значение,
 # если ключ есть в двух словарях - поместить пару {ключ: [значение_из_первого_словаря, значение_из_второго_словаря]},
+# a)
 my_dict_1 = {"name": "John", "age": 15, "header": "Chrome", "version": "2.0"}
 my_dict_2 = {"name": "Joi", "age": 32, "country": "USA", "Interests": "fishing"}
 my_list_key_in = []
@@ -63,15 +63,27 @@ for key in my_dict_1:
     if key in my_dict_2:
         my_list_key_in.append(key)
 print(my_list_key_in)
-
+# б)
 my_list_not_key = []
 for key in my_dict_1:
     if key not in my_dict_2:
         my_list_not_key.append(key)
 print(my_list_not_key)
-
+# в)
 my_dict_3 = {}
-for key in my_dict_1:
+for key, value in my_dict_1.items():
     if key not in my_dict_2:
-        my_dict_3.update(key)
+        my_dict_3[key] = value
 print(my_dict_3)
+# г)
+my_dict_new = {}
+for key, value in my_dict_1.items():
+    if key not in my_dict_2:
+        my_dict_new[key] = value
+for key, value in my_dict_2.items():
+    if key not in my_dict_1:
+        my_dict_new[key] = value
+for key, value in my_dict_1.items():
+    if key in my_dict_2:
+        my_dict_new[key] = [value, my_dict_2.get(key)]
+print(my_dict_new)
