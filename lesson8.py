@@ -6,7 +6,7 @@ with open("D:/Python/domains.txt", "r") as my_txt:
     data_domains = []
     for line in my_txt:
         data_domains.append(line[1:].rstrip())
-    # print(data_domains)
+    print(data_domains)
 # Я не совсем понял, что подразумевалось под "сохранить" так что оставлю это тут.
 # with open("D:/Python/domains.txt", "w") as txt_file:
 #     txt_file.write('\n'.join(data))
@@ -18,7 +18,7 @@ with open("D:/Python/names.txt", "r") as my_names:
     data_names = []
     for line in my_names:
         data_names.append(line.split()[1])
-    # print(data_names)
+    print(data_names)
 # И опять же с сохранением, если что пример с первого задания.
 #############################################################
 # 3. Написать функцию для генерирования e-mail в формате:

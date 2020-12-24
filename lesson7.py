@@ -85,5 +85,5 @@ for key, value in my_dict_2.items():
         my_dict_new[key] = value
 for key, value in my_dict_1.items():
     if key in my_dict_2:
-        my_dict_new[key] = [value, my_dict_2.get(key)]
+        my_dict_new[key] = [value, my_dict_2[key]]
 print(my_dict_new)
