@@ -70,13 +70,13 @@ def write_txt(filename):
         new_word = []
         for word in text_now.split():
             random_digit = random.randint(1, 100)
-            if not random_digit % 10:
+            if 90 < random_digit:
                 new_line = random_digit_creation(word)
 
-            elif not random_digit % 4:
+            elif 40 < random_digit <= 60:
                 new_line = first_letter(word)
 
-            elif not random_digit % 2:
+            elif random_digit <= 30:
                 new_line = last_letter(word)
 
             else:
@@ -152,4 +152,4 @@ def write_file(filename):
     else:
         result = print("Unsupported file format")
     return result
-write_file(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Test.json")
+write_file(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Test.txt")
