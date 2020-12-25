@@ -130,7 +130,7 @@ def write_json(filename):
 def write_csv(filename):
     with open(filename, "w") as write_in_csv:
         writer = csv.writer(write_in_csv)
-        x = random.randint(min_len, max_len)
+        x = random.randint(3, 10)
         for i in range(random.randint(3, 10)):
             writer.writerow(random.randint(0, 1) for row in range(x))
 
@@ -152,4 +152,4 @@ def write_file(filename):
     else:
         result = print("Unsupported file format")
     return result
-write_file(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Test.txt")
+write_file(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Test.csv")
