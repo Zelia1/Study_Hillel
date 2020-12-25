@@ -128,38 +128,17 @@
 # В таблицу записывать значения только 0 или 1.
 # Заголовка у таблицы нет.
 
-
-# def creation_table(len_string=random.randint(3, 10), len_columns=random.randint(3, 10)):
-#     table = []
-#     for string in range(len_string):
-#         table.append(string)
-#         for columns in range(len_columns):
-#             table.append(columns)
-#     return table
-# print(creation_table())
-
-#
-# table = []
-# for string in range(random.randint(3, 10)):
-#     table.append(string)
-#     for columns in range(random.randint(3, 10)):
-#         print(table[string][table.append(columns)])
 import random
 import csv
-data = []
-# print(A)
 
-with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Test.csv", "w") as write_in:
-    writer = csv.writer(write_in, delimiter=";")
-    data = []
-    for i in range(random.randint(3, 10)):
-        row = [random.randint(0, 1) for _ in range(random.randint(3, 10))]
-        for i in range(len(row)):
-            row[i] = int(row[i])
-            data.append(row[i])
-        data.append(row)
-    writer.writerow(data)
 
+def write_csv(min_len=3, max_len=10):
+    with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Test.csv", "w") as write_in:
+        writer = csv.writer(write_in)
+        x = random.randint(min_len, max_len)
+        for i in range(random.randint(min_len, max_len)):
+            writer.writerow(random.randint(0, 1) for row in range(x))
+write_csv()
 
 
 
