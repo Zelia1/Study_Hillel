@@ -132,15 +132,22 @@ import random
 import csv
 
 
-def write_csv(min_len=3, max_len=10):
-    with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Test.csv", "w") as write_in:
-        writer = csv.writer(write_in)
-        x = random.randint(min_len, max_len)
-        for i in range(random.randint(min_len, max_len)):
-            writer.writerow(random.randint(0, 1) for row in range(x))
-write_csv()
+# def write_csv(min_len=3, max_len=10):
+#     with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Test.csv", "w") as write_in:
+#         writer = csv.writer(write_in)
+#         x = random.randint(min_len, max_len)
+#         for i in range(random.randint(min_len, max_len)):
+#             writer.writerow(random.randint(0, 1) for row in range(x))
+# write_csv()
+
+def remove_all_before(items, border):
+    if border in items:
+        x = items.index(border)
+        value = items[x:]
+    else:
+        value = items
+    return value
 
 
-
-
-
+a, b = [], 1
+print(remove_all_before(a, b))
