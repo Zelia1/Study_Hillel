@@ -131,7 +131,6 @@
 import random
 import csv
 
-
 # def write_csv(min_len=3, max_len=10):
 #     with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Test.csv", "w") as write_in:
 #         writer = csv.writer(write_in)
@@ -140,14 +139,69 @@ import csv
 #             writer.writerow(random.randint(0, 1) for row in range(x))
 # write_csv()
 
-def remove_all_before(items, border):
-    if border in items:
-        x = items.index(border)
-        value = items[x:]
-    else:
-        value = items
-    return value
+# def remove_all_before(items, border):
+#     if border in items:
+#         x = items.index(border)
+#         value = items[x:]
+#     else:
+#         value = items
+#     return value
+#
+#
+# a, b = [], 1
+# print(remove_all_before(a, b))
+#
+# data = [[5, 2], [3, 5], [5, 1]]
+# def sort_list():
+#     sort_key = data[1]
+#     return sort_key
+# print(sorted(data, key=sort_list))
+
+import requests
+import random
+import csv
+
+def write_quotes(number_of_quotes):
+    with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\quotes.csv", "w", encoding="utf-8") as write_quotes:
 
 
-a, b = [], 1
-print(remove_all_before(a, b))
+        url = "http://api.forismatic.com/api/1.0/"
+
+        params = {"method": "getQuote",
+                  "format": "json",
+                  "key": 1,
+                  "lang": "ru"}
+
+        data_quote = []
+        data_author = []
+
+        count = 0
+        while count != number_of_quotes:
+            params["key"] = random.randint(0, 999999)
+            result = requests.get(url, params=params)
+            quote = result.json()
+            quote_text = quote["quoteText"]
+            quote_author = quote["quoteAuthor"]
+            if quote_author != "" and quote_text not in data_quote:
+                data_quote.append(quote_text)
+                data_author.append(quote_author)
+                count += 1
+
+        data = {}
+        for i in range(len(data_author)):
+            data[data_author[i]] = data_quote[i]
+
+
+        sorted_data = sorted(data.keys())
+
+        writer = csv.writer(write_quotes)
+
+        for key in range(len(data)):
+            writer.writerow(sorted_data[key])
+            writer.writerow(data[sorted_data[key]])
+        #
+        # fieldnames = sorted_data
+        # writer = csv.DictWriter(write_quotes, fieldnames=fieldnames, delimiter=";")
+        # writer.writerows(data)
+
+print(write_quotes(10))
