@@ -36,14 +36,31 @@ def write_quotes(number_of_quotes):
                 data_author.append(quote_author)
                 count += 1
 
+
         data = {}
+
         for i in range(len(data_author)):
             data[data_author[i]] = data_quote[i]
 
-        sorted_data = sorted(data.keys())
+        # Сортировка данных
+        def sorted_author_key(data):
+            for key in range(len(data)):
+                return data[key]
+        new_data = []
+        sorted_data = dict(sorted(data.items(), key=sorted_author_key))
+        new_data.append(sorted_data)
 
-        fieldnames = sorted_data
-        writer = csv.DictWriter(write_quotes, fieldnames=fieldnames, delimiter=";")
-        writer.writerows(data)
+
+        writeheader = ["Author", "Quote", "URL"]
+
+        writer = csv.writer(write_quotes)
+        # writer = csv.writer(write_quotes, delimiter=";")
+        writer.writerow(writeheader)
+        for row in sorted_data.keys():
+            r = row
+            writer.writerow(r)
+        # for key, string in sorted_data.items():
+        #     writer.writerow(key)
+
 
 write_quotes(10)

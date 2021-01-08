@@ -157,6 +157,27 @@ import csv
 #     return sort_key
 # print(sorted(data, key=sort_list))
 
+
+
+# url = "http://api.forismatic.com/api/1.0/"
+#
+# params = {"method": "getQuote",
+#           "format": "json",
+#           "key": 1,
+#           "lang": "ru"}
+# for i in range(10):
+#     params["key"] = i
+#     r = requests.get(url, params=params)
+#     quote = r.json()
+#     print(quote)
+#     # quote_text = quote["quoteText"]
+#     # print(quote_text)
+#     # quote_author = quote["quoteAuthor"]
+#     # print(quote_author)
+#
+# res = params
+# print(res)
+
 import requests
 import random
 import csv
@@ -177,31 +198,29 @@ def write_quotes(number_of_quotes):
 
         count = 0
         while count != number_of_quotes:
-            params["key"] = random.randint(0, 999999)
+            params["key"] = random.randint(1, 999999)
             result = requests.get(url, params=params)
             quote = result.json()
             quote_text = quote["quoteText"]
             quote_author = quote["quoteAuthor"]
-            if quote_author != "" and quote_text not in data_quote:
+            if quote_author == "" or quote_text in data_quote:
+                continue
+            else:
                 data_quote.append(quote_text)
                 data_author.append(quote_author)
                 count += 1
-
+        print(count)
         data = {}
         for i in range(len(data_author)):
             data[data_author[i]] = data_quote[i]
+        print(len(data))
 
+        # Сортировка данных
+        def sorted_author_key(data):
+            for key in range(len(data)):
+                return data[key]
 
-        sorted_data = sorted(data.keys())
+        sorted_data = dict(sorted(data.items(), key=sorted_author_key))
+        print(sorted_data)
 
-        writer = csv.writer(write_quotes)
-
-        for key in range(len(data)):
-            writer.writerow(sorted_data[key])
-            writer.writerow(data[sorted_data[key]])
-        #
-        # fieldnames = sorted_data
-        # writer = csv.DictWriter(write_quotes, fieldnames=fieldnames, delimiter=";")
-        # writer.writerows(data)
-
-print(write_quotes(10))
+write_quotes(10)
