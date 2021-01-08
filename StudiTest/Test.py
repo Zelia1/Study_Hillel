@@ -193,34 +193,67 @@ def write_quotes(number_of_quotes):
                   "key": 1,
                   "lang": "ru"}
 
-        data_quote = []
-        data_author = []
 
-        count = 0
-        while count != number_of_quotes:
+
+        def creat_quote():
             params["key"] = random.randint(1, 999999)
             result = requests.get(url, params=params)
             quote = result.json()
-            quote_text = quote["quoteText"]
-            quote_author = quote["quoteAuthor"]
-            if quote_author == "" or quote_text in data_quote:
-                continue
-            else:
-                data_quote.append(quote_text)
-                data_author.append(quote_author)
-                count += 1
-        print(count)
-        data = {}
-        for i in range(len(data_author)):
-            data[data_author[i]] = data_quote[i]
-        print(len(data))
+            return quote
 
-        # Сортировка данных
-        def sorted_author_key(data):
-            for key in range(len(data)):
-                return data[key]
+        data_quote = []
+        data_author = []
 
-        sorted_data = dict(sorted(data.items(), key=sorted_author_key))
-        print(sorted_data)
+
+        def check_quote(quote):
+            flag = False
+            while flag != True:
+                if quote["quoteText"] in data_quote or quote["quoteAuthor"] == "":
+                    flag = False
+                else:
+                    flag = True
+                    data_quote.append(quote["quoteText"])
+                    data_author.append(quote["quoteAuthor"])
+
+        # def number_of_quotes(quantity):
+        #     while len(data_author) != quantity:
+        #         check_quote(quote)
+        #
+
+        # print(creat_quote())
+        # number_quotes = 10
+        quote = creat_quote()
+        # creat_quote()
+        check_quote(quote)
+        print(data_author, data_quote)
+
+
+
+        # count = 0
+        # while count != number_of_quotes:
+        #     params["key"] = random.randint(1, 999999)
+        #     result = requests.get(url, params=params)
+        #     quote = result.json()
+        #     quote_text = quote["quoteText"]
+        #     quote_author = quote["quoteAuthor"]
+        #     if quote_author == "" or quote_text in data_quote:
+        #         continue
+        #     else:
+        #         data_quote.append(quote_text)
+        #         data_author.append(quote_author)
+        #         count += 1
+        # print(count)
+        # data = {}
+        # for i in range(len(data_author)):
+        #     data[data_author[i]] = data_quote[i]
+        # print(len(data))
+        #
+        # # Сортировка данных
+        # def sorted_author_key(data):
+        #     for key in range(len(data)):
+        #         return data[key]
+        #
+        # sorted_data = dict(sorted(data.items(), key=sorted_author_key))
+        # print(sorted_data)
 
 write_quotes(10)
