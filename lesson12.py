@@ -72,18 +72,17 @@ def read_and_filter(path):
 
         for line in read_file.readlines():
             data.append(line)
-
-        data = "".join(read_and_filter(file_path)).split("\n")
+        new_data = "".join(data).split("\n")
         reg_exp = r"\b\w+[ ]\w+[ ]\d+[\s-]{3}[A-Za-z0-9]+"
-        new_data = []
+        final_data = []
 
-        for i in range(len(data)):
-            result = re.findall(reg_exp, data[i])
+        for i in range(len(new_data)):
+            result = re.findall(reg_exp, new_data[i])
             if len(result) != 0:
                 for x in range(1):
-                    if ("birthday" in data[i].lower()) or ("death" in data[i].lower()):
-                        new_data.append(data[i])
-    return new_data
+                    if ("birthday" in new_data[i].lower()) or ("death" in new_data[i].lower()):
+                        final_data.append(new_data[i])
+    return final_data
 
 file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
 print(read_and_filter(file_path))
