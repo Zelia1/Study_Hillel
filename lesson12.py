@@ -51,7 +51,7 @@ def write_quotes_csv(number_of_quotes):
         sorted_data = sorted(data_list, key=lambda sort: sort[headers[0]])
 
         fieldnames = data_list[0].keys()
-        writer = csv.DictWriter(write_quotes, fieldnames=fieldnames)
+        writer = csv.DictWriter(write_quotes, fieldnames=fieldnames, delimiter=";")
         writer.writerows(sorted_data)
 
 number_of_quotes = 10
