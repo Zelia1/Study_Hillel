@@ -1,10 +1,3 @@
-# 1. Написать функцию, которая принимает в виде параметра целое число - количество цитат (см. урок 12).
-# Надо получить ровно столько не повторяющихся цитат с данными и сохранить их в csv файл
-# (имя файла сделать параметром по умолчанию).
-# Заголовки файла:
-# Author, Quote, URL. Если автор не указан, цитату не брать.
-# Перед сохранением в csv, записи отсортировать по автору (в алфавитном порядке).
-
 import requests
 import random
 import csv
@@ -51,11 +44,11 @@ def write_quotes(number_of_quotes):
 
 
         sorted_data = sorted(data_list, key=lambda sort: sort[headers[0]])
-        print(len(sorted_data))
+        print(sorted_data)
 
         fieldnames = data_list[0].keys()
-        writer = csv.DictWriter(write_quotes, fieldnames=fieldnames)
+        writer = csv.DictWriter(write_quotes, fieldnames=fieldnames, delimiter=";")
         writer.writerows(sorted_data)
 
-number_of_quotes = 10
-write_quotes(number_of_quotes)
+
+write_quotes(10)
