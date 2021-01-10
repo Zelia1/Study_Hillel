@@ -38,7 +38,6 @@ def write_quotes(number_of_quotes):
                 data_link.append(quote_link)
                 count += 1
 
-        print(count)
         headers = ["Author", "Quote", "URL"]
         data = {}
         data_list = []
@@ -49,9 +48,7 @@ def write_quotes(number_of_quotes):
             data_copy = data.copy()
             data_list.append(data_copy)
 
-
         sorted_data = sorted(data_list, key=lambda sort: sort[headers[0]])
-        print(len(sorted_data))
 
         fieldnames = data_list[0].keys()
         writer = csv.DictWriter(write_quotes, fieldnames=fieldnames)
