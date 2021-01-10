@@ -9,7 +9,7 @@ import requests
 import random
 import csv
 
-def write_quotes(number_of_quotes):
+def write_quotes_csv(number_of_quotes):
     with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\quotes.csv", "w", encoding="utf-8") as write_quotes:
 
 
@@ -55,4 +55,22 @@ def write_quotes(number_of_quotes):
         writer.writerows(sorted_data)
 
 number_of_quotes = 10
-write_quotes(number_of_quotes)
+write_quotes_csv(number_of_quotes)
+
+##########################################################################################
+# 2. Дан файл authors.txt
+# 2.1) написать функцию, которая считывает данные из этого файла,
+# возвращая СПИСОК тех строк в которых есть полная дата, писатель и указание на его день рождения или смерти.
+# Например: 26th February 1802 - Victor Hugo's birthday - author of Les Misérables.
+
+def read_txt(path):
+    with open(file_path, "r", encoding="utf-8") as read_file:
+        data_authors = []
+
+        for line in read_file.readlines():
+            data_authors.append(line)
+        return data_authors
+
+
+file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
+read_txt(file_path)
