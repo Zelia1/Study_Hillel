@@ -63,14 +63,27 @@ write_quotes_csv(number_of_quotes)
 # возвращая СПИСОК тех строк в которых есть полная дата, писатель и указание на его день рождения или смерти.
 # Например: 26th February 1802 - Victor Hugo's birthday - author of Les Misérables.
 
-def read_txt(path):
-    with open(file_path, "r", encoding="utf-8") as read_file:
-        data_authors = []
+import re
+
+def read_and_filter(path):
+    with open(path, "r", encoding="utf-8") as read_file:
+
+        data = []
 
         for line in read_file.readlines():
-            data_authors.append(line)
-        return data_authors
+            data.append(line)
 
+        data = "".join(read_and_filter(file_path)).split("\n")
+        reg_exp = r"\b\w+[ ]\w+[ ]\d+[\s-]{3}[A-Za-z0-9]+"
+        new_data = []
+
+        for i in range(len(data)):
+            result = re.findall(reg_exp, data[i])
+            if len(result) != 0:
+                for x in range(1):
+                    if ("birthday" in data[i].lower()) or ("death" in data[i].lower()):
+                        new_data.append(data[i])
+    return new_data
 
 file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
-read_txt(file_path)
+print(read_and_filter(file_path))

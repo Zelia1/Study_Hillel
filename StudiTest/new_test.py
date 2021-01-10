@@ -52,6 +52,7 @@
 #
 #
 # write_quotes(10)
+import re
 
 def read_txt(path):
     with open(file_path, "r", encoding="utf-8") as read_file:
@@ -61,7 +62,21 @@ def read_txt(path):
             data.append(line)
         return data
 
-
 file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
-data = ''.join(read_txt(file_path))
-print(data)
+
+
+
+def data_filter(data, filter_pattern):
+    new_data = []
+    for i in range(len(data)):
+        result = re.findall(filter_pattern, data[i])
+        if len(result) != 0:
+            for x in range(1):
+                if ("birthday" in data[i].lower()) or ("death" in data[i].lower()):
+                    new_data.append(data[i])
+    return new_data
+
+data = "".join(read_txt(file_path)).split("\n")
+reg_exp = r"\b\w+[ ]\w+[ ]\d+[\s-]{3}[A-Za-z0-9]+"
+
+print(data_filter(data, reg_exp))
