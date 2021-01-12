@@ -111,6 +111,11 @@ def creat_dict_authors(data):
     for list_index in range(len(result_filter)):
         name_find = re.findall(reg_exp_name, result_filter[list_index])
         date_find = re.findall(reg_exp_date, result_filter[list_index])
+        if len(date_find[0]) < 2:
+            old_digit = str(date_find.pop(0))
+            new_digit = "0" + old_digit
+            date_find.insert(0, new_digit)
+
 
         if "birthday" in name_find:
             search_index = name_find.index("birthday")

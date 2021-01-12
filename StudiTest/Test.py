@@ -260,20 +260,20 @@ import csv
 #
 #         sorted_data = dict(sorted(data.items(), key=sorted_author_key))
 #         print(sorted_data)
-#
-# write_quotes(10)
-names = ["author", "quote", "link"]
-author = ["xasd", "gsfdgfd", "fsdf"]
-quote = ["dasd", "jasdjlaskjdlask", "kfsjhdfjklhsjhgiuwe"]
-link = ["123798", "1394", "198-104"]
-data = {}
-data_list = []
-for i in range(len(author)):
-    data[names[0]] = author[i]
-    data[names[1]] = quote[i]
-    data[names[2]] = link[i]
-    x = data.copy()
-    data_list.append(x)
+# #
+# # write_quotes(10)
+# names = ["author", "quote", "link"]
+# author = ["xasd", "gsfdgfd", "fsdf"]
+# quote = ["dasd", "jasdjlaskjdlask", "kfsjhdfjklhsjhgiuwe"]
+# link = ["123798", "1394", "198-104"]
+# data = {}
+# data_list = []
+# for i in range(len(author)):
+#     data[names[0]] = author[i]
+#     data[names[1]] = quote[i]
+#     data[names[2]] = link[i]
+#     x = data.copy()
+#     data_list.append(x)
 
 # data_list.append(data)
 # for x in range(len(data)):
@@ -288,7 +288,10 @@ for i in range(len(author)):
 # print(sorted_list(data_list))
 
 # # key = "".join([names[0]])
-sorted_list = sorted(data_list, key=lambda x: x[names[0]])
-# # # print(key)
-# print(data_list)
-print(sorted_list)
+# sorted_list = sorted(data_list, key=lambda x: x[names[0]])
+# # # # print(key)
+# # print(data_list)
+# print(sorted_list)
+# for i in range(11):
+#     print(ord(str(i)))
+print(ord(str(9)), ord(str(0)))
