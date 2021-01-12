@@ -121,8 +121,6 @@ def creat_dict_authors(data):
             search_index = name_find.index("birthday")
             temporary_dict["name"] = " ".join(name_find[4:search_index])
 
-
-
         elif "death" in name_find:
             search_index = name_find.index("death")
             temporary_dict["name"] = " ".join(name_find[4:search_index])
