@@ -91,9 +91,9 @@ def creat_dict_authors(data):
     data_authors = []
 
     for list_index in range(len(data)):
-        x = str(data[list_index]).split("-")
-        temporary_dict["author"] = x[1].split("'")[0].strip()
-        date_list = x[0][2:].split()
+        data_for_processing = str(data[list_index]).split("-")
+        temporary_dict["author"] = data_for_processing[1].split("'")[0].strip()
+        date_list = data_for_processing[0][2:].split()
         for i in range(len(month_list)):
             if month_list[i] in date_list:
                 if i < 9:
