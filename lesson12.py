@@ -81,7 +81,6 @@ def read_and_filter(path):
 
 
 def creat_dict_authors(data):
-    reg_exp_name = r"[-\w.']+"
     reg_exp_date = r"[0-9]+"
     month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
                   "November",
