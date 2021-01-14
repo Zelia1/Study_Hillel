@@ -1,82 +1,64 @@
-# import requests
-# import random
-# import csv
-#
-# def write_quotes(number_of_quotes):
-#     with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\quotes.csv", "w", encoding="utf-8") as write_quotes:
-#
-#
-#         url = "http://api.forismatic.com/api/1.0/"
-#
-#         params = {"method": "getQuote",
-#                   "format": "json",
-#                   "key": 1,
-#                   "lang": "ru"}
-#
-#         data_quote = []
-#         data_author = []
-#         data_link = []
-#
-#         count = 0
-#         while count != number_of_quotes:
-#             params["key"] = random.randint(0, 999999)
-#             result = requests.get(url, params=params)
-#             quote = result.json()
-#             quote_text = quote["quoteText"]
-#             quote_author = quote["quoteAuthor"]
-#             quote_link = quote["quoteLink"]
-#             if quote_author != "" and quote_text not in data_quote:
-#                 data_quote.append(quote_text)
-#                 data_author.append(quote_author)
-#                 data_link.append(quote_link)
-#                 count += 1
-#
-#         print(count)
-#         headers = ["Author", "Quote", "URL"]
-#         data = {}
-#         data_list = []
-#         for i in range(len(data_author)):
-#             data[headers[0]] = data_author[i]
-#             data[headers[1]] = data_quote[i]
-#             data[headers[2]] = data_link[i]
-#             data_copy = data.copy()
-#             data_list.append(data_copy)
-#
-#
-#         sorted_data = sorted(data_list, key=lambda sort: sort[headers[0]])
-#         print(sorted_data)
-#
-#         fieldnames = data_list[0].keys()
-#         writer = csv.DictWriter(write_quotes, fieldnames=fieldnames, delimiter=";")
-#         writer.writerows(sorted_data)
-#
-#
-# write_quotes(10)
+import requests
+import random
+import csv
 import re
+import json
 
-def read_txt(path):
-    with open(file_path, "r", encoding="utf-8") as read_file:
+
+def read_and_filter(path):
+    with open(path, "r", encoding="utf-8") as read_file:
+
         data = []
 
         for line in read_file.readlines():
-            data.append(line)
-        return data
+            if ("birthday" in line.lower()) or ("death" in line.lower()):
+                data.append(line.split("\n"))
+
+    return data
+
+
+def creat_dict_authors(data):
+    reg_exp_name = r"[-\w.']+"
+    reg_exp_date = r"[0-9]+"
+    month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+                  "November",
+                  "December"]
+
+    temporary_dict = {}
+    data_authors = []
+
+    for list_index in range(len(data)):
+        x = str(data[list_index]).split("-")
+        temporary_dict["author"] = x[1].split("'")[0].strip()
+        date_list = x[0][2:].split()
+        for i in range(len(month_list)):
+            if month_list[i] in date_list:
+                if i < 9:
+                    date_list[1] = "0" + str(i + 1)
+                else:
+                    date_list[1] = str(i + 1)
+        temporary_dict["date"] = " ".join(date_list)
+        new_date = "/".join(re.findall(reg_exp_date, temporary_dict["date"]))
+        if len(new_date) < 10:
+            new_date = "0" + new_date
+        temporary_dict["date"] = new_date
+        final_dict = temporary_dict.copy()
+        data_authors.append(final_dict)
+
+    return data_authors
+
+
+##########################################################################################
+# 2.3) Написать функцию, которая сохраняет результат пункта 2.2 в json файл.
+
+def write_dict_in_json_file(path, dict):
+    with open(path, "w") as write_in_json:
+        json.dump(dict, write_in_json, indent=2)
+
 
 file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
-
-
-
-def data_filter(data, filter_pattern):
-    new_data = []
-    for i in range(len(data)):
-        result = re.findall(filter_pattern, data[i])
-        if len(result) != 0:
-            for x in range(1):
-                if ("birthday" in data[i].lower()) or ("death" in data[i].lower()):
-                    new_data.append(data[i])
-    return new_data
-
-data = "".join(read_txt(file_path)).split("\n")
-reg_exp = r"\b\w+[ ]\w+[ ]\d+[\s-]{3}[A-Za-z0-9]+"
-
-print(data_filter(data, reg_exp))
+data_from_file = read_and_filter(file_path)
+path_in_json = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Authors.json"
+data_to_write = creat_dict_authors(data_from_file)
+write_dict_in_json_file(path_in_json, data_to_write)
+#

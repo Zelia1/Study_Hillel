@@ -12,54 +12,47 @@ import re
 import json
 
 
-def write_quotes_csv(number_of_quotes):
-    with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\quotes.csv", "w",
-              encoding="utf-8") as write_quotes:
+def read_and_save_qoute(number):
+    url = "http://api.forismatic.com/api/1.0/"
 
-        url = "http://api.forismatic.com/api/1.0/"
+    params = {"method": "getQuote",
+              "format": "json",
+              "key": 1,
+              "lang": "ru"}
 
-        params = {"method": "getQuote",
-                  "format": "json",
-                  "key": 1,
-                  "lang": "ru"}
+    data_list = []
 
-        data_quote = []
-        data_author = []
-        data_link = []
-
-        count = 0
-        while count != number_of_quotes:
-            params["key"] = random.randint(0, 999999)
-            result = requests.get(url, params=params)
-            quote = result.json()
-            quote_text = quote["quoteText"]
-            quote_author = quote["quoteAuthor"]
-            quote_link = quote["quoteLink"]
-            if quote_author != "" and quote_text not in data_quote:
-                data_quote.append(quote_text)
-                data_author.append(quote_author)
-                data_link.append(quote_link)
-                count += 1
-
-        headers = ["Author", "Quote", "URL"]
+    count = 0
+    while count != number:
         data = {}
-        data_list = []
-        for i in range(len(data_author)):
-            data[headers[0]] = data_author[i]
-            data[headers[1]] = data_quote[i]
-            data[headers[2]] = data_link[i]
+        params["key"] = random.randint(0, 999999)
+        result = requests.get(url, params=params)
+        quote = result.json()
+        if quote["quoteAuthor"] != "" and quote["quoteText"] not in data_list:
+            data["Author"] = quote["quoteAuthor"]
+            data["Quote"] = quote["quoteText"]
+            data["URL"] = quote["quoteLink"]
             data_copy = data.copy()
             data_list.append(data_copy)
+            count += 1
 
-        sorted_data = sorted(data_list, key=lambda sort: sort[headers[0]])
-
-        fieldnames = data_list[0].keys()
-        writer = csv.DictWriter(write_quotes, fieldnames=fieldnames, delimiter=";")
-        writer.writerows(sorted_data)
+    return data_list
 
 
 number_of_quotes = 10
-write_quotes_csv(number_of_quotes)
+data_to_sort = read_and_save_qoute(number_of_quotes)
+sorted_data = sorted(data_to_sort, key=lambda sort: sort["Author"])
+
+
+def write_quotes_csv(data):
+    with open(r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\quotes.csv", "w",
+              encoding="utf-8") as write_quotes:
+        fieldnames = data[0].keys()
+        writer = csv.DictWriter(write_quotes, fieldnames=fieldnames, delimiter=";")
+        writer.writerows(data)
+
+
+write_quotes_csv(sorted_data)
 
 
 ##########################################################################################
@@ -75,21 +68,10 @@ def read_and_filter(path):
         data = []
 
         for line in read_file.readlines():
-            data.append(line)
-        new_data = "".join(data).split("\n")
-        reg_exp = r"\b\w+[ ]\w+[ ]\d+[\s-]{3}[A-Za-z0-9]+"
-        final_data = []
+            if ("birthday" in line.lower()) or ("death" in line.lower()):
+                data.append(line.split("\n"))
 
-        for i in range(len(new_data)):
-            result = re.findall(reg_exp, new_data[i])
-            if len(result) != 0:
-                for x in range(1):
-                    if ("birthday" in new_data[i].lower()) or ("death" in new_data[i].lower()):
-                        final_data.append(new_data[i])
-    return final_data
-
-
-file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
+    return data
 
 
 ##########################################################################################
@@ -106,41 +88,27 @@ def creat_dict_authors(data):
                   "December"]
 
     temporary_dict = {}
-    dict_author = []
+    data_authors = []
 
-    for list_index in range(len(result_filter)):
-        name_find = re.findall(reg_exp_name, result_filter[list_index])
-        date_find = re.findall(reg_exp_date, result_filter[list_index])
-        if len(date_find[0]) < 2:
-            old_digit = str(date_find.pop(0))
-            new_digit = "0" + old_digit
-            date_find.insert(0, new_digit)
+    for list_index in range(len(data)):
+        x = str(data[list_index]).split("-")
+        temporary_dict["author"] = x[1].split("'")[0].strip()
+        date_list = x[0][2:].split()
+        for i in range(len(month_list)):
+            if month_list[i] in date_list:
+                if i < 9:
+                    date_list[1] = "0" + str(i + 1)
+                else:
+                    date_list[1] = str(i + 1)
+        temporary_dict["date"] = " ".join(date_list)
+        new_date = "/".join(re.findall(reg_exp_date, temporary_dict["date"]))
+        if len(new_date) < 10:
+            new_date = "0" + new_date
+        temporary_dict["date"] = new_date
+        final_dict = temporary_dict.copy()
+        data_authors.append(final_dict)
 
-
-        if "birthday" in name_find:
-            search_index = name_find.index("birthday")
-            temporary_dict["name"] = " ".join(name_find[4:search_index])
-
-        elif "death" in name_find:
-            search_index = name_find.index("death")
-            temporary_dict["name"] = " ".join(name_find[4:search_index])
-
-        for index_month in range(len(month_list)):
-            if month_list[index_month] in name_find:
-                if index_month < 9:
-                    date_find.insert(1, "0" + str(index_month + 1))
-                    temporary_dict["date"] = "/".join(date_find[:3])
-                    copy_dict = temporary_dict.copy()
-                    dict_author.append(copy_dict)
-                if index_month >= 9:
-                    date_find.insert(1, str(index_month + 1))
-                    temporary_dict["date"] = "/".join(date_find[:3])
-                    copy_dict = temporary_dict.copy()
-                    dict_author.append(copy_dict)
-    return dict_author
-
-
-result_filter = read_and_filter(file_path)
+    return data_authors
 
 
 ##########################################################################################
@@ -151,6 +119,8 @@ def write_dict_in_json_file(path, dict):
         json.dump(dict, write_in_json, indent=2)
 
 
+file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
+data_from_file = read_and_filter(file_path)
 path_in_json = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Authors.json"
-dict_authors = creat_dict_authors(result_filter)
-write_dict_in_json_file(path_in_json, dict_authors)
+data_to_write = creat_dict_authors(data_from_file)
+write_dict_in_json_file(path_in_json, data_to_write)
