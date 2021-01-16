@@ -113,9 +113,9 @@ def creat_dict_authors(data):
 ##########################################################################################
 # 2.3) Написать функцию, которая сохраняет результат пункта 2.2 в json файл.
 
-def write_dict_in_json_file(path, dict):
+def write_dict_in_json_file(path, data):
     with open(path, "w") as write_in_json:
-        json.dump(dict, write_in_json, indent=2)
+        json.dump(data, write_in_json, indent=2)
 
 
 file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
