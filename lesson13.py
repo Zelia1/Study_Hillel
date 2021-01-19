@@ -35,7 +35,7 @@ class EmailGenerator:
         self.names = self.get_names()
 
     def __repr__(self):
-        return f"len domains = {len(self.get_domains())}, len names = {len(self.get_names())}"
+        return f"len domains = {len(self.domains)}, len names = {len(self.names)}"
 
     def get_domains(self):
         with open(self.path_domains, "r") as my_txt:
