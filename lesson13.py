@@ -22,6 +22,7 @@
 # email = email_generator.generate_email()
 # print(email)
 # >>>miller.249@sgdyyur.com
+
 import random
 
 
@@ -53,7 +54,7 @@ class EmailGenerator:
     def generate_email(self):
         random_alphabet = ''.join([chr(random.randint(97, 122)) for index in range(random.randint(5, 7))])
         e_mail = (
-            f'{random.choice(self.get_names())}.{random.randint(100, 999)}@{random_alphabet}.{random.choice(self.get_domains())}')
+            f'{random.choice(self.names)}.{random.randint(100, 999)}@{random_alphabet}.{random.choice(self.domains)}')
         return e_mail
 
 
