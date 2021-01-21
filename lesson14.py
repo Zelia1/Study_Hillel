@@ -31,7 +31,7 @@ class Mage(UnitReader):
         if self.data["health"] < 100:
             self.data["health"] += 10
             if self.data["health"] > 100:
-                self.data["health"] = self.data["health"] - self.data["health"] % 10
+                self.data["health"] -= self.data["health"] % 10
         return self.data["health"]
 
 
@@ -40,7 +40,7 @@ class Archer(UnitReader):
         if self.data["health"] < 100:
             self.data["health"] += 10
             if self.data["health"] > 100:
-                self.data["health"] = self.data["health"] - self.data["health"] % 10
+                self.data["health"] -= self.data["health"] % 10
         return self.data["health"]
 
 
@@ -49,7 +49,7 @@ class Knight(UnitReader):
         if self.data["health"] < 100:
             self.data["health"] += 10
             if self.data["health"] > 100:
-                self.data["health"] = self.data["health"] - self.data["health"] % 10
+                self.data["health"] -= self.data["health"] % 10
         return self.data["health"]
 
 
@@ -61,5 +61,19 @@ filename_knight = "Knight.json"
 mage_worker = Mage(os.path.join(folder, filename_mage))
 archer_worker = Archer(os.path.join(folder, filename_archer))
 knight_worker = Knight(os.path.join(folder, filename_knight))
+
+mage_worker.read_unit()
+mage_worker.to_heal()
+mage_worker.to_heal()
+mage_worker.to_heal()
+mage_worker.to_heal()
+mage_worker.to_heal()
+mage_worker.to_heal()
+mage_worker.to_heal()
+mage_worker.to_heal()
+mage_worker.to_heal()
+mage_worker.to_heal()
+
+print(mage_worker.data)
 
 
