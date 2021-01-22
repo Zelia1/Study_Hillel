@@ -2,5 +2,11 @@
   "name": "Archer",
   "clan": "Сross-eyed",
   "health": 1,
-  "agility": 1
+  "skills": [
+    {
+      "intelligence": 1,
+      "strength": 1,
+      "agility": 1
+    }
+  ]
 }
