@@ -1,70 +1,109 @@
-import json
-import os
+# В компьютерной игре есть юниты (персонажи).
+# Каждый юнит имеет такие характеристики:
+# имя
+# клан
+# здоровье    (int от 1 до 100. Начальное значение 100)
+# сила        (int от 1 до 10. Начальное значение 1)
+# ловкость    (int от 1 до 10. Начальное значение 1)
+# интелект    (int от 1 до 10. Начальное значение 1)
+#
+# Каждый юнит может лечиться (увеличить свое здоровье на 10 пунктов, максимум 100) - написать метод увеличения здаровья.
+#
+# Есть три типа юнитов - маги, лучники и рыцари.
+# У магов есть дополнительная характеристика - тип магии (воздух, огонь, вода)
+# У лучников есть дополнительная характеристика - тип лука (лук, арбалет)
+# У рыцарей есть дополнительная характеристика - тип оружия (меч, топор, пика)
 
+# Каждый юнит может увеличить свой базовый навык на 1 пункт, максимум 10.
+# Маг увеличивает интелект.
+# Лучник увеличивает ловкость.
+# Рыцарь увеличивает силу.
+# Написать метод увеличения базового навыка (в родительском классе).
 
-class UnitReader:
-    def __init__(self, path_file):
-        self._path_file = path_file
-        self.data = None
+# Предложить свою реализацию классов Unit, Mage, Archer, Knight.
+
+class Unit:
+
+    def __init__(self, name, clan):
+        self.name = name
+        self.clan = clan
+        self.hp = 100
+        self.intellect = 1
+        self.agility = 1
+        self.strength = 1
+        self.class_unit = ""
+        self.damage_type = ""
+
+    @property
+    def type_damage(self):
+        return self.damage_type
 
     def __repr__(self):
-        return self._path_file
-
-    def read_unit(self):
-        with open(self._path_file, "r") as file:
-            self.data = json.load(file)
-
-    def skill_increase(self):
-        if self.data["name"] == "Mage":
-            self.data["skills"][0]["intelligence"] += 1
-        elif self.data["name"] == "Archer":
-            self.data["skills"][0]["agility"] += 1
-        elif self.data["name"] == "Knight":
-            self.data["skills"][0]["strength"] += 1
-        return self.data
+        if self.class_unit == "mage":
+            return f"Класс игрока: {self.class_unit}, имя: {self.name}, клан: {self.clan}, " \
+                   f"жизни: {self.hp}, интелект: {self.intellect}, вид урона: {self.damage_type}"
+        if self.class_unit == "archer":
+            return f"Класс игрока: {self.class_unit}, имя: {self.name}, клан: {self.clan}, " \
+                   f"жизни: {self.hp}, ловкость: {self.agility}, вид урона: {self.damage_type}"
+        if self.class_unit == "knight":
+            return f"Класс игрока: {self.class_unit}, имя: {self.name}, клан: {self.clan}, " \
+                   f"жизни: {self.hp}, сила: {self.strength}, вид урона: {self.damage_type}"
 
     def to_heal(self):
-        if self.data["health"] < 100:
-            self.data["health"] += 10
-            if self.data["health"] > 100:
-                self.data["health"] = 100
-        return self.data["health"]
+        if self.hp < 100:
+            self.hp += 10
+            if self.hp > 100:
+                self.hp = 100
+        return self.hp
+
+    def skill_increase(self):
+        if self.class_unit == "mage":
+            if self.intellect < 10:
+                self.intellect += 1
+        if self.class_unit == "archer":
+            if self.agility < 10:
+                self.agility += 1
+        if self.class_unit == "knight":
+            if self.strength < 10:
+                self.strength += 1
 
 
-class Mage(UnitReader):
-    def increase_skill(self):
-        if self.data["skills"][0]["intelligence"] < 10:
-            return mage_worker.skill_increase()
+class Mage(Unit):
+    def __init__(self, name, clan, damage_type):
+        super().__init__(name, clan)
+        self.name = name
+        self.damage_type = damage_type
+        self.class_unit = "mage"
+
+    @property
+    def type_damage(self):
+        return self.damage_type
 
 
-class Archer(UnitReader):
-    def increase_skill(self):
-        if self.data["skills"][0]["agility"] < 10:
-            return archer_worker.skill_increase()
+class Archer(Unit):
+    def __init__(self, name, clan, damage_type):
+        super().__init__(name, clan)
+        self.name = name
+        self.damage_type = damage_type
+        self.class_unit = "archer"
+
+    @property
+    def type_damage(self):
+        return self.damage_type
 
 
-class Knight(UnitReader):
-    def increase_skill(self):
-        if self.data["skills"][0]["strength"] < 10:
-            return knight_worker.skill_increase()
+class Knight(Unit):
+    def __init__(self, name, clan, damage_type):
+        super().__init__(name, clan)
+        self.name = name
+        self.damage_type = damage_type
+        self.class_unit = "knight"
+
+    @property
+    def type_damage(self):
+        return self.damage_type
 
 
-folder = "Unit_data"
-filename_mage = "Mage.json"
-filename_archer = "Archer.json"
-filename_knight = "Knight.json"
-
-mage_worker = Mage(os.path.join(folder, filename_mage))
-archer_worker = Archer(os.path.join(folder, filename_archer))
-knight_worker = Knight(os.path.join(folder, filename_knight))
-
-mage_worker.read_unit()
-archer_worker.read_unit()
-knight_worker.read_unit()
-knight_worker.increase_skill()
-knight_worker.increase_skill()
-archer_worker.increase_skill()
-print(archer_worker.data)
-print(mage_worker.data)
-print(knight_worker.data)
-# print(mage_worker.data)
+Mage_1 = Mage("Toombli", "Idiots", "Fire")
+Archer_1 = Archer("Legolas", "Сross-eyed", "Bow")
+Knight_1 = Knight("Aragorn", "Сrooked", "Sword")

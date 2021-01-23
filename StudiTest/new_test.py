@@ -1,118 +1,169 @@
-import requests
-import random
-import csv
-import re
+# В компьютерной игре есть юниты (персонажи).
+# Каждый юнит имеет такие характеристики:
+# имя
+# клан
+# здоровье    (int от 1 до 100. Начальное значение 100)
+# сила        (int от 1 до 10. Начальное значение 1)
+# ловкость    (int от 1 до 10. Начальное значение 1)
+# интелект    (int от 1 до 10. Начальное значение 1)
+#
+# Каждый юнит может лечиться (увеличить свое здоровье на 10 пунктов, максимум 100) - написать метод увеличения здаровья.
+#
+# Есть три типа юнитов - маги, лучники и рыцари.
+# У магов есть дополнительная характеристика - тип магии (воздух, огонь, вода)
+# У лучников есть дополнительная характеристика - тип лука (лук, арбалет)
+# У рыцарей есть дополнительная характеристика - тип оружия (меч, топор, пика)
+
+# Каждый юнит может увеличить свой базовый навык на 1 пункт, максимум 10.
+# Маг увеличивает интелект.
+# Лучник увеличивает ловкость.
+# Рыцарь увеличивает силу.
+# Написать метод увеличения базового навыка (в родительском классе).
+
+# Предложить свою реализацию классов Unit, Mage, Archer, Knight.
+
+class Unit:
+
+    def __init__(self, name, clan):
+        self.name = name
+        self.clan = clan
+        self.hp = 100
+        self.intellect = 1
+        self.agility = 1
+        self.strength = 1
+        self.class_unit = ""
+        self.damage_type = ""
+
+    @property
+    def type_damage(self):
+        return self.damage_type
+
+    def __repr__(self):
+        if self.class_unit == "mage":
+            return f"Класс игрока: {self.class_unit}, имя: {self.name}, клан: {self.clan}, " \
+                   f"жизни: {self.hp}, интелект: {self.intellect}, вид урона: {self.damage_type}"
+        if self.class_unit == "archer":
+            return f"Класс игрока: {self.class_unit}, имя: {self.name}, клан: {self.clan}, " \
+                   f"жизни: {self.hp}, ловкость: {self.agility}, вид урона: {self.damage_type}"
+        if self.class_unit == "knight":
+            return f"Класс игрока: {self.class_unit}, имя: {self.name}, клан: {self.clan}, " \
+                   f"жизни: {self.hp}, сила: {self.strength}, вид урона: {self.damage_type}"
+
+    def to_heal(self):
+        if self.hp < 100:
+            self.hp += 10
+            if self.hp > 100:
+                self.hp = 100
+        return self.hp
+
+    def skill_increase(self):
+        if self.class_unit == "mage":
+            if self.intellect < 10:
+                self.intellect += 1
+        if self.class_unit == "archer":
+            if self.agility < 10:
+                self.agility += 1
+        if self.class_unit == "knight":
+            if self.strength < 10:
+                self.strength += 1
 
 
-# import json
-#
-#
-# def read_and_filter(path):
-#     with open(path, "r", encoding="utf-8") as read_file:
-#
-#         data = []
-#
-#         for line in read_file.readlines():
-#             if ("birthday" in line.lower()) or ("death" in line.lower()):
-#                 data.append(line.split("\n"))
-#
-#     return data
-#
-#
-# def creat_dict_authors(data):
-#     reg_exp_name = r"[-\w.']+"
-#     reg_exp_date = r"[0-9]+"
-#     month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
-#                   "November",
-#                   "December"]
-#
-#     temporary_dict = {}
-#     data_authors = []
-#
-#     for list_index in range(len(data)):
-#         x = str(data[list_index]).split("-")
-#         temporary_dict["author"] = x[1].split("'")[0].strip()
-#         date_list = x[0][2:].split()
-#         for i in range(len(month_list)):
-#             if month_list[i] in date_list:
-#                 if i < 9:
-#                     date_list[1] = "0" + str(i + 1)
-#                 else:
-#                     date_list[1] = str(i + 1)
-#         temporary_dict["date"] = " ".join(date_list)
-#         new_date = "/".join(re.findall(reg_exp_date, temporary_dict["date"]))
-#         if len(new_date) < 10:
-#             new_date = "0" + new_date
-#         temporary_dict["date"] = new_date
-#         final_dict = temporary_dict.copy()
-#         data_authors.append(final_dict)
-#
-#     return data_authors
-#
-#
-# ##########################################################################################
-# # 2.3) Написать функцию, которая сохраняет результат пункта 2.2 в json файл.
-#
-# def write_dict_in_json_file(path, dict):
-#     with open(path, "w") as write_in_json:
-#         json.dump(dict, write_in_json, indent=2)
-#
-#
-# file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
-# data_from_file = read_and_filter(file_path)
-# path_in_json = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\Authors.json"
-# data_to_write = creat_dict_authors(data_from_file)
-# write_dict_in_json_file(path_in_json, data_to_write)
-#
-# def read_and_filter(path):
-#     with open(path, "r", encoding="utf-8") as read_file:
-#         reg_exp_birthday = r"[A-Za-z0-9\s\S]+birthday\S+"
-#         reg_exp_death = r"[A-Za-z0-9\s\S]+death"
-#         data = []
-#
-#         for line in read_file.readlines():
-#             if ("birthday" in line.lower()) or ("death" in line.lower()) and re.findall(reg_exp_birthday, line):
-#                 data.append(line.split("\n"))
-#                 # x = re.findall(reg_exp_birthday, line)
-#                 print(line)
-#
-#
-#
-# file_path = r"C:\Users\Zelia\PycharmProjects\Study_Hillel\StudiTest\authors.txt"
-# read_and_filter(file_path)
+class Mage(Unit):
+    def __init__(self, name, clan, damage_type):
+        super().__init__(name, clan)
+        self.name = name
+        self.damage_type = damage_type
+        self.class_unit = "mage"
+
+    @property
+    def type_damage(self):
+        return self.damage_type
 
 
-class EmailGenerator:
+class Archer(Unit):
+    def __init__(self, name, clan, damage_type):
+        super().__init__(name, clan)
+        self.name = name
+        self.damage_type = damage_type
+        self.class_unit = "archer"
 
-    def __init__(self, domains_path, names_path):
-        self.path_domains = domains_path
-        self.path_names = names_path
-        self.domains = self.get_domains()
-        self.names = self.get_names()
-
-    def __str__(self):
-        return f"len domains = {self.get_domains()}, len names = {self.get_names()}"
-
-    def get_domains(self):
-        with open(self.path_domains, "r") as my_txt:
-            data_domains = []
-            for line in my_txt:
-                data_domains.append(line[1:].rstrip())
-        return len(data_domains)
-
-    def get_names(self):
-        with open(self.path_names, "r") as my_names:
-            data_names = []
-            for line in my_names:
-                data_names.append(line.split()[1])
-        return len(data_names)
+    @property
+    def type_damage(self):
+        return self.damage_type
 
 
+class Knight(Unit):
+    def __init__(self, name, clan, damage_type):
+        super().__init__(name, clan)
+        self.name = name
+        self.damage_type = damage_type
+        self.class_unit = "knight"
+
+    @property
+    def type_damage(self):
+        return self.damage_type
 
 
+Mage_1 = Mage("Toombli", "Idiots", "Fire")
+Archer_1 = Archer("Legolas", "Сross-eyed", "Bow")
+Knight_1 = Knight("Aragorn", "Сrooked", "Sword")
+Archer_1.skill_increase()
+Knight_1.skill_increase()
+Knight_1.skill_increase()
+Knight_1.to_heal()
+Mage_1.skill_increase()
+print(Knight_1)
+print(Archer_1)
+print(Mage_1)
 
-path_domains = "D:/Python/domains.txt"
-path_names = "D:/Python/names.txt"
-
-email_generator = EmailGenerator(path_domains, path_names)
-print(email_generator)
+######################################################################
+# class Unit:
+#     def __init__(self, name, clan):
+#         self.name = name
+#         self.clan = clan
+#         self.health = 100
+#         self._power = 1
+#         self._agility = 1
+#         self._intellect = 1
+#         self._base_skil = 1
+#
+#     @property
+#     def power(self):
+#         return self._power
+#
+#     @property
+#     def agility(self):
+#         return self._agility
+#
+#     @property
+#     def intellect(self):
+#         return self._intellect
+#
+#     def __repr__(self):
+#         return f"Name: {self.name}, clan: {self.clan}, intellect: {self.intellect}, power: {self.power}"
+#
+#     def therapy(self):
+#         if self.health <= 90:
+#             self.health += 10
+#         elif self.health > 90:
+#             self.health = 100
+#
+#     def increase_base_skill(self):
+#         if self._base_skil < 10:
+#             self._base_skil += 1
+#
+#
+# class Mage(Unit):
+#     def __init__(self, name, clan, type_magic):
+#         super().__init__(name, clan)
+#         self.type_magic = type_magic
+#
+#     @property
+#     def intellect(self):
+#         return self._base_skil
+#
+# Mage_1 = Mage("Toombli", "Idiots", "Fire")
+#
+# print(Mage_1)
+# Mage_1.increase_base_skill()
+# print(Mage_1)
